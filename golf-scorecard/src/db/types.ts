@@ -1,0 +1,13 @@
+export type Round = { id: string; created_at: string };
+
+export type HoleStats = {
+  round_id: string;
+  hole: number;       // 1..18
+  strokes: number;    // total strokes on hole
+  putts: number;
+  within_100: boolean;
+  fairway: boolean;
+  gir: boolean;
+  hazard: boolean;
+  updated_at: string;
+};
