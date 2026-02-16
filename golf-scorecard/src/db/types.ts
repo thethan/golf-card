@@ -9,5 +9,6 @@ export type HoleStats = {
   fairway: boolean;
   gir: boolean;
   hazard: boolean;
+  balls_lost: number;
   updated_at: string;
 };

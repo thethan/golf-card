@@ -48,7 +48,7 @@ export function RoundScreen() {
     const p = parseLine(line);
     if ("error" in p) return Alert.alert("Parse error", p.error);
 
-    await upsertHole(db, { round_id: roundId, ...p });
+    await upsertHole(db, {round_id: roundId, ...p});
     setLine("");
     await refresh();
   }

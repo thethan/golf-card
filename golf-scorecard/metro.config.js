@@ -1,6 +1,9 @@
 const { getDefaultConfig } = require("expo/metro-config");
-const nativewindMetro = require("nativewind/metro");
+const { withNativeWind } = require("nativewind/metro");
 
-const withNativeWind = nativewindMetro.withNativeWind ?? nativewindMetro.default;
+const config = getDefaultConfig(__dirname);
 
-module.exports = withNativeWind(getDefaultConfig(__dirname));
+// Required for expo-sqlite on web (wa-sqlite.wasm)
+config.resolver.assetExts.push("wasm");
+
+module.exports = withNativeWind(config);
