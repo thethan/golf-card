@@ -47,7 +47,7 @@ export async function upsertHole(db: Db, s: {
 }
 
 export async function listHoles(db: Db, roundId: string): Promise<HoleStats[]> {
-    const rows = await db.getAllAsync<any>(
+    const rows = await db.getAllAsync(
         `SELECT round_id,
                 hole,
                 strokes,
