@@ -3,7 +3,11 @@ PRAGMA journal_mode = WAL;
 
 CREATE TABLE IF NOT EXISTS rounds (
     id TEXT PRIMARY KEY,
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    name TEXT,
+    players TEXT,
+    pars TEXT,
+    tee_box TEXT
   );
 
   CREATE TABLE IF NOT EXISTS holes (

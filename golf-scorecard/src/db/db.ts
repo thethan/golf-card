@@ -31,12 +31,28 @@ function createWebDb(): Db {
         runAsync: async (sql: string, params: unknown[] = []) => {
             const db = loadWebDb();
 
-            // INSERT OR IGNORE INTO rounds
+            // INSERT OR IGNORE INTO rounds (with new fields)
             if (sql.includes("INSERT OR IGNORE INTO rounds")) {
-                const [id, created_at] = params as [string, string];
+                const [id, created_at, name, players, pars, tee_box] = params as [string, string, string | null, string, string, string | null];
                 if (!db.rounds.find((r: { id: string }) => r.id === id)) {
-                    db.rounds.push({ id, created_at });
+                    db.rounds.push({ id, created_at, name, players, pars, tee_box });
                 }
+                saveWebDb(db);
+                return;
+            }
+
+            // DELETE FROM holes WHERE round_id = ?
+            if (sql.includes("DELETE FROM holes WHERE round_id")) {
+                const [roundId] = params;
+                db.holes = db.holes.filter((h: { round_id: string }) => h.round_id !== roundId);
+                saveWebDb(db);
+                return;
+            }
+
+            // DELETE FROM rounds WHERE id = ?
+            if (sql.includes("DELETE FROM rounds WHERE id")) {
+                const [id] = params;
+                db.rounds = db.rounds.filter((r: { id: string }) => r.id !== id);
                 saveWebDb(db);
                 return;
             }
@@ -86,9 +102,17 @@ function createWebDb(): Db {
         getAllAsync: async (sql: string, params: unknown[] = []) => {
             const db = loadWebDb();
 
-            // SELECT rounds
+            // SELECT rounds by id
+            if (sql.includes("FROM rounds WHERE id")) {
+                const [id] = params;
+                return db.rounds.filter((r: { id: string }) => r.id === id);
+            }
+
+            // SELECT all rounds (ordered by created_at desc)
             if (sql.includes("FROM rounds")) {
-                return db.rounds;
+                return [...db.rounds].sort((a: { created_at: string }, b: { created_at: string }) =>
+                    b.created_at.localeCompare(a.created_at)
+                );
             }
 
             // SELECT holes by round_id

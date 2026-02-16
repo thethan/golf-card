@@ -1,10 +1,12 @@
 import React from "react";
 import { openDb, Db } from "../db/db";
-import { createRound, listHoles, upsertHole } from "../db/repo";
+import { getRound, listHoles, upsertHole } from "../db/repo";
 import { parseLine } from "../input/parseLine";
+import type { Round } from "../db/types";
 
-function uuid(): string {
-    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+interface Props {
+    roundId: string;
+    onBack: () => void;
 }
 
 interface HoleData {
@@ -19,15 +21,19 @@ interface HoleData {
     balls_lost?: number;
 }
 
-const DEFAULT_PARS = [4, 4, 3, 5, 4, 4, 3, 5, 4, 4, 4, 3, 5, 4, 4, 3, 5, 4];
+const DEFAULT_PARS_FALLBACK = [4, 4, 3, 5, 4, 4, 3, 5, 4, 4, 4, 3, 5, 4, 4, 3, 5, 4];
 
-export function RoundScreen() {
+export function RoundScreen({ roundId, onBack }: Props) {
     const [db, setDb] = React.useState<Db | null>(null);
-    const [roundId] = React.useState<string>(() => uuid());
+    const [round, setRound] = React.useState<Round | null>(null);
     const [holes, setHoles] = React.useState<HoleData[]>([]);
     const [line, setLine] = React.useState("");
     const [selectedHole, setSelectedHole] = React.useState<number | null>(null);
     const [error, setError] = React.useState<string | null>(null);
+    const [loading, setLoading] = React.useState(true);
+
+    // Use round pars or fallback
+    const pars = round?.pars ?? DEFAULT_PARS_FALLBACK;
 
     // Input state for selected hole
     const [holeInput, setHoleInput] = React.useState({
@@ -44,8 +50,10 @@ export function RoundScreen() {
         (async () => {
             const d = await openDb();
             setDb(d);
-            await createRound(d, roundId);
+            const roundData = await getRound(d, roundId);
+            setRound(roundData);
             setHoles(await listHoles(d, roundId));
+            setLoading(false);
         })();
     }, [roundId]);
 
@@ -130,7 +138,7 @@ export function RoundScreen() {
     const getScoreColor = (holeNum: number) => {
         const data = getHoleData(holeNum);
         if (!data?.strokes) return "text-slate-500";
-        const par = DEFAULT_PARS[holeNum - 1];
+        const par = pars[holeNum - 1];
         const diff = data.strokes - par;
         if (diff <= -2) return "text-amber-400";
         if (diff === -1) return "text-red-400";
@@ -149,7 +157,7 @@ export function RoundScreen() {
     };
 
     const calcParTotal = (start: number, end: number) => {
-        return DEFAULT_PARS.slice(start - 1, end).reduce((a, b) => a + b, 0);
+        return pars.slice(start - 1, end).reduce((a, b) => a + b, 0);
     };
 
     const renderHoleRow = (start: number, end: number, label: string) => (
@@ -174,7 +182,7 @@ export function RoundScreen() {
                 </div>
                 {Array.from({ length: end - start + 1 }, (_, i) => (
                     <div key={i} className="flex-1 flex items-center justify-center">
-                        <span className="text-slate-500 text-sm">{DEFAULT_PARS[start + i - 1]}</span>
+                        <span className="text-slate-500 text-sm">{pars[start + i - 1]}</span>
                     </div>
                 ))}
                 <div className="w-12 flex items-center justify-center">
@@ -244,11 +252,35 @@ export function RoundScreen() {
         </div>
     );
 
+    if (loading) {
+        return (
+            <div className="flex flex-col min-h-screen bg-slate-950 items-center justify-center">
+                <p className="text-slate-400">Loading round...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col min-h-screen bg-slate-950">
             <div className="px-4 pt-14 pb-4 bg-emerald-900 border-b border-emerald-700">
-                <h1 className="text-white text-2xl font-bold text-center">⛳ Scorecard</h1>
-                <p className="text-emerald-300 text-center mt-1">Tap a hole to enter score</p>
+                <div className="flex items-center justify-between mb-2">
+                    <button onClick={onBack} className="text-emerald-300 text-lg">
+                        ← Back
+                    </button>
+                    <div className="w-16" />
+                </div>
+                <h1 className="text-white text-2xl font-bold text-center">
+                    {round?.name || "⛳ Scorecard"}
+                </h1>
+                {round?.players && round.players.length > 0 && (
+                    <p className="text-emerald-300 text-center mt-1">
+                        {round.players.join(", ")}
+                        {round.tee_box && ` • ${round.tee_box} tees`}
+                    </p>
+                )}
+                {(!round?.players || round.players.length === 0) && (
+                    <p className="text-emerald-300 text-center mt-1">Tap a hole to enter score</p>
+                )}
             </div>
 
             {error && (
@@ -292,7 +324,7 @@ export function RoundScreen() {
                             Hole {selectedHole}
                         </h2>
                         <p className="text-emerald-400 text-sm mb-4">
-                            Par {DEFAULT_PARS[selectedHole - 1]}
+                            Par {pars[selectedHole - 1]}
                         </p>
 
                         {renderNumberInput("Total Strokes", holeInput.strokes, (v) =>

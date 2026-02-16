@@ -1,11 +1,60 @@
 import type {Db} from "./db";
 import type {HoleStats, Round} from "./types";
 
-export async function createRound(db: Db, id: string): Promise<Round> {
+export const DEFAULT_PARS = [4, 4, 3, 5, 4, 4, 3, 5, 4, 4, 4, 3, 5, 4, 4, 3, 5, 4];
+
+export async function createRound(db: Db, data: {
+    id: string;
+    name?: string;
+    players: string[];
+    pars?: number[];
+    tee_box?: string;
+}): Promise<Round> {
     const created_at = new Date().toISOString();
-    await db.runAsync(`INSERT OR IGNORE INTO rounds (id, created_at)
-                       VALUES (?, ?)`, [id, created_at]);
-    return {id, created_at};
+    const pars = data.pars ?? DEFAULT_PARS;
+    await db.runAsync(
+        `INSERT OR IGNORE INTO rounds (id, created_at, name, players, pars, tee_box)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [data.id, created_at, data.name ?? null, JSON.stringify(data.players), JSON.stringify(pars), data.tee_box ?? null]
+    );
+    return { id: data.id, created_at, name: data.name, players: data.players, pars, tee_box: data.tee_box };
+}
+
+export async function listRounds(db: Db): Promise<Round[]> {
+    const rows = await db.getAllAsync(
+        `SELECT id, created_at, name, players, pars, tee_box FROM rounds ORDER BY created_at DESC`,
+        []
+    );
+    return rows.map((r: any) => ({
+        id: r.id,
+        created_at: r.created_at,
+        name: r.name ?? undefined,
+        players: r.players ? JSON.parse(r.players) : [],
+        pars: r.pars ? JSON.parse(r.pars) : DEFAULT_PARS,
+        tee_box: r.tee_box ?? undefined,
+    }));
+}
+
+export async function getRound(db: Db, id: string): Promise<Round | null> {
+    const rows = await db.getAllAsync(
+        `SELECT id, created_at, name, players, pars, tee_box FROM rounds WHERE id = ?`,
+        [id]
+    );
+    if (rows.length === 0) return null;
+    const r: any = rows[0];
+    return {
+        id: r.id,
+        created_at: r.created_at,
+        name: r.name ?? undefined,
+        players: r.players ? JSON.parse(r.players) : [],
+        pars: r.pars ? JSON.parse(r.pars) : DEFAULT_PARS,
+        tee_box: r.tee_box ?? undefined,
+    };
+}
+
+export async function deleteRound(db: Db, id: string): Promise<void> {
+    await db.runAsync(`DELETE FROM holes WHERE round_id = ?`, [id]);
+    await db.runAsync(`DELETE FROM rounds WHERE id = ?`, [id]);
 }
 
 export async function upsertHole(db: Db, s: {

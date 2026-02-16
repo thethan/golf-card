@@ -1,4 +1,11 @@
-export type Round = { id: string; created_at: string };
+export type Round = {
+  id: string;
+  created_at: string;
+  name?: string;
+  players: string[];
+  pars: number[];
+  tee_box?: string;
+};
 
 export type HoleStats = {
   round_id: string;
