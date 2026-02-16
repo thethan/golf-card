@@ -1,0 +1,51 @@
+{
+  "name": "Golf Scorecard App",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "installGradle": true
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "dsznajder.es7-react-js-snippets",
+        "msjsdiag.vscode-react-native"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    },
+    "codespaces": {
+      "openFiles": [
+        "README.md",
+        "golf-scorecard/App.tsx"
+      ]
+    }
+  },
+  "forwardPorts": [8081, 19000, 19001, 19002, 19006],
+  "portsAttributes": {
+    "8081": {
+      "label": "Metro Bundler",
+      "onAutoForward": "notify"
+    },
+    "19000": {
+      "label": "Expo Dev Server",
+      "onAutoForward": "notify"
+    },
+    "19006": {
+      "label": "Expo Web",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "postCreateCommand": "cd golf-scorecard && npm install",
+  "postStartCommand": "echo '🏌️ Golf Scorecard ready! Run: cd golf-scorecard && npm run web'",
+  "remoteUser": "node"
+}
+

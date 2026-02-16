@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "golf-scorecard",
+    "name": "Golf Scorecard",
     "slug": "golf-scorecard",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -26,7 +26,11 @@
       "package": "com.anonymous.golfscorecard"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single",
+      "name": "Golf Scorecard",
+      "shortName": "Golf"
     },
     "plugins": [
     ]
