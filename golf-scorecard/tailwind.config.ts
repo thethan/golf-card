@@ -5,6 +5,10 @@ export default {
   theme: {
     extend: {
       colors: {
+        bg: "rgb(var(--bg) / <alpha-value>)",
+        fg: "rgb(var(--fg) / <alpha-value>)",
+        accent: "rgb(var(--accent) / <alpha-value>)",
+        good: "rgb(var(--good) / <alpha-value>)",
         // Brand palette (from the logo)
         ink: {
           950: "#141512",
@@ -31,6 +35,7 @@ export default {
           cream: "#FBF4DA",
         },
       },
+
 
       borderRadius: {
         badge: "9999px",

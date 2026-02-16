@@ -137,12 +137,12 @@ export function RoundScreen({ roundId, onBack }: Props) {
 
     const getScoreColor = (holeNum: number) => {
         const data = getHoleData(holeNum);
-        if (!data?.strokes) return "text-slate-500";
+        if (!data?.strokes) return "text-gold-400/50";
         const par = pars[holeNum - 1];
         const diff = data.strokes - par;
         if (diff <= -2) return "text-amber-400";
         if (diff === -1) return "text-red-400";
-        if (diff === 0) return "text-white";
+        if (diff === 0) return "text-gold-100";
         if (diff === 1) return "text-sky-400";
         return "text-sky-600";
     };
@@ -162,37 +162,37 @@ export function RoundScreen({ roundId, onBack }: Props) {
 
     const renderHoleRow = (start: number, end: number, label: string) => (
         <div className="mb-4">
-            <div className="flex flex-row border-b border-slate-700 pb-2">
+            <div className="flex flex-row border-b border-gold-700/30 pb-2">
                 <div className="w-12">
-                    <span className="text-slate-400 text-xs font-bold">{label}</span>
+                    <span className="text-gold-400/60 text-xs font-bold">{label}</span>
                 </div>
                 {Array.from({ length: end - start + 1 }, (_, i) => (
                     <div key={i} className="flex-1 flex items-center justify-center">
-                        <span className="text-slate-400 text-xs font-bold">{start + i}</span>
+                        <span className="text-gold-400/60 text-xs font-bold">{start + i}</span>
                     </div>
                 ))}
                 <div className="w-12 flex items-center justify-center">
-                    <span className="text-slate-400 text-xs font-bold">TOT</span>
+                    <span className="text-gold-400/60 text-xs font-bold">TOT</span>
                 </div>
             </div>
 
-            <div className="flex flex-row border-b border-slate-800 py-2">
+            <div className="flex flex-row border-b border-gold-700/20 py-2">
                 <div className="w-12">
-                    <span className="text-slate-500 text-xs">PAR</span>
+                    <span className="text-gold-400/50 text-xs">PAR</span>
                 </div>
                 {Array.from({ length: end - start + 1 }, (_, i) => (
                     <div key={i} className="flex-1 flex items-center justify-center">
-                        <span className="text-slate-500 text-sm">{pars[start + i - 1]}</span>
+                        <span className="text-gold-400/50 text-sm">{pars[start + i - 1]}</span>
                     </div>
                 ))}
                 <div className="w-12 flex items-center justify-center">
-                    <span className="text-slate-500 text-sm">{calcParTotal(start, end)}</span>
+                    <span className="text-gold-400/50 text-sm">{calcParTotal(start, end)}</span>
                 </div>
             </div>
 
             <div className="flex flex-row py-2">
                 <div className="w-12">
-                    <span className="text-white text-xs font-semibold">SCORE</span>
+                    <span className="text-gold-100 text-xs font-semibold">SCORE</span>
                 </div>
                 {Array.from({ length: end - start + 1 }, (_, i) => {
                     const holeNum = start + i;
@@ -204,7 +204,7 @@ export function RoundScreen({ roundId, onBack }: Props) {
                         >
                             <div
                                 className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                    selectedHole === holeNum ? "bg-emerald-600" : "bg-slate-800"
+                                    selectedHole === holeNum ? "bg-gold-400" : "bg-ink-800"
                                 }`}
                             >
                                 <span className={`text-sm font-bold ${getScoreColor(holeNum)}`}>
@@ -215,23 +215,23 @@ export function RoundScreen({ roundId, onBack }: Props) {
                     );
                 })}
                 <div className="w-12 flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">{calcTotal(start, end)}</span>
+                    <span className="text-gold-100 text-sm font-bold">{calcTotal(start, end)}</span>
                 </div>
             </div>
         </div>
     );
 
     const renderCheckboxRow = (label: string, value: boolean, onToggle: () => void) => (
-        <div className="flex flex-row items-center justify-between py-3 border-b border-slate-800">
-            <span className="text-white text-base">{label}</span>
+        <div className="flex flex-row items-center justify-between py-3 border-b border-gold-700/20">
+            <span className="text-gold-100 text-base">{label}</span>
             <button
                 onClick={onToggle}
                 className={`w-12 h-6 rounded-full transition-colors ${
-                    value ? "bg-emerald-600" : "bg-slate-600"
+                    value ? "bg-fairway-600" : "bg-gray-800 border-gold-400 hover:bg-gold-700"
                 }`}
             >
                 <div
-                    className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                    className={`w-5 h-5 rounded-full bg-gold-100 shadow transition-transform ${
                         value ? "translate-x-6" : "translate-x-0.5"
                     }`}
                 />
@@ -240,13 +240,13 @@ export function RoundScreen({ roundId, onBack }: Props) {
     );
 
     const renderNumberInput = (label: string, value: string, onChange: (v: string) => void) => (
-        <div className="flex flex-row items-center justify-between py-3 border-b border-slate-800">
-            <span className="text-white text-base">{label}</span>
+        <div className="flex flex-row items-center justify-between py-3 border-b border-gold-700/20">
+            <span className="text-gold-100 text-base">{label}</span>
             <input
                 type="number"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="bg-slate-800 text-white text-center w-16 py-2 rounded-lg"
+                className="bg-gold-100 text-ink-950 text-center w-16 py-2 rounded-lg border border-gold-700/30 placeholder-ink-950/40"
                 placeholder="0"
             />
         </div>
@@ -254,32 +254,33 @@ export function RoundScreen({ roundId, onBack }: Props) {
 
     if (loading) {
         return (
-            <div className="flex flex-col min-h-screen bg-slate-950 items-center justify-center">
-                <p className="text-slate-400">Loading round...</p>
+            <div className="flex flex-col min-h-screen bg-ink-950 items-center justify-center">
+                <p className="text-gold-400/60">Loading round...</p>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-slate-950">
-            <div className="px-4 pt-14 pb-4 bg-emerald-900 border-b border-emerald-700">
+        <div className="flex flex-col min-h-screen bg-ink-950">
+            <div className="px-4 pt-14 pb-4 bg-crest-radial border-b border-gold-700/30">
                 <div className="flex items-center justify-between mb-2">
-                    <button onClick={onBack} className="text-emerald-300 text-lg">
+                    <button onClick={onBack} className="text-gold-400 text-lg">
                         ← Back
                     </button>
+                    <img src="/all_of_each_golf_logo.png" alt="All of Each Golf" className="h-10" />
                     <div className="w-16" />
                 </div>
-                <h1 className="text-white text-2xl font-bold text-center">
+                <h1 className="text-gold-100 text-2xl font-bold text-center">
                     {round?.name || "⛳ Scorecard"}
                 </h1>
                 {round?.players && round.players.length > 0 && (
-                    <p className="text-emerald-300 text-center mt-1">
+                    <p className="text-gold-400 text-center mt-1">
                         {round.players.join(", ")}
                         {round.tee_box && ` • ${round.tee_box} tees`}
                     </p>
                 )}
                 {(!round?.players || round.players.length === 0) && (
-                    <p className="text-emerald-300 text-center mt-1">Tap a hole to enter score</p>
+                    <p className="text-gold-400 text-center mt-1">Tap a hole to enter score</p>
                 )}
             </div>
 
@@ -293,22 +294,22 @@ export function RoundScreen({ roundId, onBack }: Props) {
             )}
 
             <div className="flex-1 overflow-y-auto px-3">
-                <div className="mt-4 bg-slate-900 rounded-xl p-3 border border-slate-800">
+                <div className="mt-4 rounded-card bg-ink-900 p-3 border border-gold-700/30 shadow-lift">
                     {renderHoleRow(1, 9, "OUT")}
                     {renderHoleRow(10, 18, "IN")}
 
-                    <div className="flex flex-row border-t border-slate-700 pt-3 mt-2">
+                    <div className="flex flex-row border-t border-gold-700/30 pt-3 mt-2">
                         <div className="flex-1">
-                            <span className="text-slate-400 text-sm block">Front 9</span>
-                            <span className="text-white text-xl font-bold">{calcTotal(1, 9)}</span>
+                            <span className="text-gold-400/60 text-sm block">Front 9</span>
+                            <span className="text-gold-100 text-xl font-bold">{calcTotal(1, 9)}</span>
                         </div>
                         <div className="flex-1 text-center">
-                            <span className="text-slate-400 text-sm block">Back 9</span>
-                            <span className="text-white text-xl font-bold">{calcTotal(10, 18)}</span>
+                            <span className="text-gold-400/60 text-sm block">Back 9</span>
+                            <span className="text-gold-100 text-xl font-bold">{calcTotal(10, 18)}</span>
                         </div>
                         <div className="flex-1 text-right">
-                            <span className="text-emerald-400 text-sm block">Total</span>
-                            <span className="text-emerald-400 text-2xl font-bold">
+                            <span className="text-gold-400 text-sm block">Total</span>
+                            <span className="text-gold-400 text-2xl font-bold">
                                 {typeof calcTotal(1, 9) === "number" && typeof calcTotal(10, 18) === "number"
                                     ? (calcTotal(1, 9) as number) + (calcTotal(10, 18) as number)
                                     : "-"}
@@ -319,11 +320,11 @@ export function RoundScreen({ roundId, onBack }: Props) {
 
                 {/* Hole Details Panel */}
                 {selectedHole && (
-                    <div className="mt-4 bg-slate-900 rounded-xl p-4 border border-emerald-600">
-                        <h2 className="text-white text-lg font-bold mb-1">
+                    <div className="mt-4 rounded-card bg-ink-900 p-4 border border-gold-400/50 shadow-lift">
+                        <h2 className="text-gold-100 text-lg font-bold mb-1">
                             Hole {selectedHole}
                         </h2>
-                        <p className="text-emerald-400 text-sm mb-4">
+                        <p className="text-gold-400 text-sm mb-4">
                             Par {pars[selectedHole - 1]}
                         </p>
 
@@ -352,15 +353,15 @@ export function RoundScreen({ roundId, onBack }: Props) {
                         <div className="flex flex-row gap-3 mt-4">
                             <button
                                 onClick={() => setSelectedHole(null)}
-                                className="flex-1 bg-slate-700 rounded-lg py-3 text-center"
+                                className="flex-1 bg-ink-700 rounded-lg py-3 text-center border border-gold-700/30"
                             >
-                                <span className="text-white font-semibold">Cancel</span>
+                                <span className="text-gold-100 font-semibold">Cancel</span>
                             </button>
                             <button
                                 onClick={saveHoleDetails}
-                                className="flex-1 bg-emerald-600 rounded-lg py-3 text-center"
+                                className="flex-1 rounded-badge bg-ink-950 ring-2 ring-gold-400/70 shadow-badge py-3 text-center"
                             >
-                                <span className="text-white font-semibold">Save</span>
+                                <span className="text-gold-100 font-semibold">Save</span>
                             </button>
                         </div>
                     </div>
@@ -372,13 +373,13 @@ export function RoundScreen({ roundId, onBack }: Props) {
                         value={line}
                         onChange={(e) => setLine(e.target.value)}
                         placeholder="e.g., hole 4 strokes 6 putts 2"
-                        className="w-full bg-slate-900 text-white px-3 py-3 rounded-lg border border-slate-800 placeholder-slate-500"
+                        className="w-full bg-gold-100 text-ink-950 px-3 py-3 rounded-lg border border-gold-700/30 placeholder-ink-950/40"
                     />
                     <button
                         onClick={saveFromText}
-                        className="mt-2 w-full bg-emerald-600 rounded-lg py-3 text-center"
+                        className="mt-2 w-full rounded-badge bg-ink-950 text-gold-100 ring-2 ring-gold-400/70 shadow-badge hover:shadow-lift py-3 text-center transition-all"
                     >
-                        <span className="text-white font-semibold">Save</span>
+                        <span className="font-semibold">Save</span>
                     </button>
                 </div>
             </div>

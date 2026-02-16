@@ -72,14 +72,14 @@ export function CreateRoundScreen({ onRoundCreated, onCancel }: Props) {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-slate-950">
-            <div className="px-4 pt-14 pb-4 bg-emerald-900 border-b border-emerald-700">
+        <div className="flex flex-col min-h-screen bg-ink-950">
+            <div className="px-4 pt-14 pb-4 bg-crest-radial border-b border-gold-700/30">
                 <div className="flex items-center justify-between">
-                    <button onClick={onCancel} className="text-emerald-300 text-lg">
+                    <button onClick={onCancel} className="text-gold-400 text-lg">
                         ← Back
                     </button>
-                    <h1 className="text-white text-xl font-bold">New Round</h1>
-                    <div className="w-16" />
+                    <img src="/all_of_each_golf_logo.png" alt="All of Each Golf" className="h-10" />
+                    <h1 className="text-gold-100 text-xl font-bold">New Round</h1>
                 </div>
             </div>
 
@@ -92,19 +92,19 @@ export function CreateRoundScreen({ onRoundCreated, onCancel }: Props) {
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
                 {/* Round Name */}
                 <div>
-                    <label className="text-slate-400 text-sm block mb-2">Round Name (optional)</label>
+                    <label className="text-gold-400/60 text-sm block mb-2">Round Name (optional)</label>
                     <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="e.g., Saturday Morning Round"
-                        className="w-full bg-slate-900 text-white px-4 py-3 rounded-lg border border-slate-700 placeholder-slate-500"
+                        className="w-full bg-ink-900 text-gold-100 px-4 py-3 rounded-lg border border-gold-700/30 placeholder-gold-400/40"
                     />
                 </div>
 
                 {/* Players */}
                 <div>
-                    <label className="text-slate-400 text-sm block mb-2">Players</label>
+                    <label className="text-gold-400/60 text-sm block mb-2">Players</label>
                     <div className="flex gap-2">
                         <input
                             type="text"
@@ -112,11 +112,11 @@ export function CreateRoundScreen({ onRoundCreated, onCancel }: Props) {
                             onChange={(e) => setPlayerInput(e.target.value)}
                             onKeyDown={(e) => e.key === "Enter" && addPlayer()}
                             placeholder="Enter player name"
-                            className="flex-1 bg-slate-900 text-white px-4 py-3 rounded-lg border border-slate-700 placeholder-slate-500"
+                            className="flex-1 bg-ink-900 text-gold-100 px-4 py-3 rounded-lg border border-gold-700/30 placeholder-gold-400/40"
                         />
                         <button
                             onClick={addPlayer}
-                            className="bg-emerald-600 px-4 rounded-lg text-white font-semibold"
+                            className="bg-fairway-600 px-4 rounded-lg text-gold-100 font-semibold"
                         >
                             Add
                         </button>
@@ -126,12 +126,12 @@ export function CreateRoundScreen({ onRoundCreated, onCancel }: Props) {
                             {players.map((player, i) => (
                                 <span
                                     key={i}
-                                    className="bg-slate-800 text-white px-3 py-1 rounded-full flex items-center gap-2"
+                                    className="bg-ink-950 text-gold-100 px-3 py-1 rounded-full flex items-center gap-2 ring-1 ring-gold-400/50"
                                 >
                                     {player}
                                     <button
                                         onClick={() => removePlayer(i)}
-                                        className="text-slate-400 hover:text-red-400"
+                                        className="text-gold-400/60 hover:text-red-400"
                                     >
                                         ×
                                     </button>
@@ -143,7 +143,7 @@ export function CreateRoundScreen({ onRoundCreated, onCancel }: Props) {
 
                 {/* Tee Box Selection */}
                 <div>
-                    <label className="text-slate-400 text-sm block mb-2">Tee Box</label>
+                    <label className="text-gold-400/60 text-sm block mb-2">Tee Box</label>
                     <div className="grid grid-cols-3 gap-2">
                         {TEE_BOXES.map((box) => (
                             <button
@@ -151,8 +151,8 @@ export function CreateRoundScreen({ onRoundCreated, onCancel }: Props) {
                                 onClick={() => setTeeBox(box)}
                                 className={`py-3 rounded-lg text-center transition-colors ${
                                     teeBox === box
-                                        ? "bg-emerald-600 text-white"
-                                        : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                                        ? "bg-fairway-600 text-gold-100"
+                                        : "bg-ink-900 text-gold-400/70 hover:bg-ink-800 border border-gold-700/30"
                                 }`}
                             >
                                 {box}
@@ -164,56 +164,56 @@ export function CreateRoundScreen({ onRoundCreated, onCancel }: Props) {
                 {/* Pars Configuration */}
                 <div>
                     <div className="flex items-center justify-between mb-2">
-                        <label className="text-slate-400 text-sm">Course Pars</label>
+                        <label className="text-gold-400/60 text-sm">Course Pars</label>
                         <button
                             onClick={() => setShowParsEditor(!showParsEditor)}
-                            className="text-emerald-400 text-sm"
+                            className="text-gold-400 text-sm"
                         >
                             {showParsEditor ? "Hide" : "Customize"}
                         </button>
                     </div>
 
                     {!showParsEditor ? (
-                        <div className="bg-slate-900 p-3 rounded-lg border border-slate-700">
-                            <p className="text-slate-300 text-sm">
+                        <div className="bg-ink-900 p-3 rounded-lg border border-gold-700/30">
+                            <p className="text-gold-100/80 text-sm">
                                 Total Par: {pars.reduce((a, b) => a + b, 0)} (Front: {pars.slice(0, 9).reduce((a, b) => a + b, 0)}, Back: {pars.slice(9).reduce((a, b) => a + b, 0)})
                             </p>
                         </div>
                     ) : (
-                        <div className="bg-slate-900 p-4 rounded-lg border border-slate-700">
-                            <p className="text-slate-400 text-xs mb-3">Front 9</p>
+                        <div className="bg-ink-900 p-4 rounded-lg border border-gold-700/30">
+                            <p className="text-gold-400/60 text-xs mb-3">Front 9</p>
                             <div className="grid grid-cols-9 gap-1 mb-4">
                                 {pars.slice(0, 9).map((par, i) => (
                                     <div key={i} className="text-center">
-                                        <span className="text-slate-500 text-xs block">{i + 1}</span>
+                                        <span className="text-gold-400/50 text-xs block">{i + 1}</span>
                                         <input
                                             type="number"
                                             value={par}
                                             onChange={(e) => updatePar(i, e.target.value)}
-                                            className="w-full bg-slate-800 text-white text-center py-2 rounded text-sm"
+                                            className="w-full bg-ink-950 text-gold-100 text-center py-2 rounded text-sm border border-gold-700/30"
                                             min={3}
                                             max={6}
                                         />
                                     </div>
                                 ))}
                             </div>
-                            <p className="text-slate-400 text-xs mb-3">Back 9</p>
+                            <p className="text-gold-400/60 text-xs mb-3">Back 9</p>
                             <div className="grid grid-cols-9 gap-1">
                                 {pars.slice(9, 18).map((par, i) => (
                                     <div key={i} className="text-center">
-                                        <span className="text-slate-500 text-xs block">{i + 10}</span>
+                                        <span className="text-gold-400/50 text-xs block">{i + 10}</span>
                                         <input
                                             type="number"
                                             value={par}
                                             onChange={(e) => updatePar(i + 9, e.target.value)}
-                                            className="w-full bg-slate-800 text-white text-center py-2 rounded text-sm"
+                                            className="w-full bg-ink-950 text-gold-100 text-center py-2 rounded text-sm border border-gold-700/30"
                                             min={3}
                                             max={6}
                                         />
                                     </div>
                                 ))}
                             </div>
-                            <p className="text-slate-500 text-xs text-center mt-3">
+                            <p className="text-gold-400/50 text-xs text-center mt-3">
                                 Total: {pars.reduce((a, b) => a + b, 0)}
                             </p>
                         </div>
@@ -221,12 +221,12 @@ export function CreateRoundScreen({ onRoundCreated, onCancel }: Props) {
                 </div>
             </div>
 
-            <div className="p-4 border-t border-slate-800 bg-slate-950">
+            <div className="p-4 border-t border-gold-700/30 bg-ink-950">
                 <button
                     onClick={handleSubmit}
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 rounded-xl py-4 text-center transition-colors"
+                    className="w-full rounded-badge bg-ink-950 text-gold-100 ring-2 ring-gold-400/70 shadow-badge hover:shadow-lift py-4 text-center transition-all"
                 >
-                    <span className="text-white font-semibold text-lg">Start Round</span>
+                    <span className="font-semibold text-lg">Start Round</span>
                 </button>
             </div>
         </div>
