@@ -34,8 +34,10 @@ function WebRoundView() {
 }
 
 function WebApp() {
+    // For GitHub Pages, use the /golf-card/ base path
+    const basename = process.env.GITHUB_PAGES ? "/golf-card/" : "/";
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={basename}>
             <Routes>
                 <Route path="/" element={<WebRoundsList />} />
                 <Route path="/create" element={<WebCreateRound />} />

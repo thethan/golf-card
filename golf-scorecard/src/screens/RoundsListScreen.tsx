@@ -1,14 +1,15 @@
 import React from "react";
-import { openDb, Db } from "../db/db";
-import { listRounds, deleteRound } from "../db/repo";
-import type { Round } from "../db/types";
+import {Db, openDb} from "../db/db";
+import {deleteRound, listRounds} from "../db/repo";
+import type {Round} from "../db/types";
+// import {CourseMap} from "@/screens/geojson.tsx";
 
 interface Props {
     onSelectRound: (roundId: string) => void;
     onCreateRound: () => void;
 }
 
-export function RoundsListScreen({ onSelectRound, onCreateRound }: Props) {
+export function RoundsListScreen({onSelectRound, onCreateRound}: Props) {
     const [db, setDb] = React.useState<Db | null>(null);
     const [rounds, setRounds] = React.useState<Round[]>([]);
     const [loading, setLoading] = React.useState(true);
@@ -43,9 +44,9 @@ export function RoundsListScreen({ onSelectRound, onCreateRound }: Props) {
         <div className="flex flex-col min-h-screen bg-ink-950">
             <div className="px-4 pt-14 pb-4 bg-crest-radial border-b border-gold-700/30">
                 <div className="flex justify-center mb-2">
-                    <img src="/all_of_each_golf_logo.png" alt="All of Each Golf" className="h-12" />
+                    <img src="/all_of_each_golf_logo.png" alt="All of Each Golf" className="h-12"/>
                 </div>
-                <h1 className="text-gold-100 text-2xl font-bold text-center">⛳ Golf Rounds</h1>
+                <h1 className="text-gold-100 text-2xl font-bold text-center">Golf Rounds</h1>
                 <p className="text-gold-400/75 text-center mt-1">Your scorecard history</p>
             </div>
 
@@ -116,6 +117,7 @@ export function RoundsListScreen({ onSelectRound, onCreateRound }: Props) {
                     <span className="font-semibold text-lg">+ New Round</span>
                 </button>
             </div>
+
         </div>
     );
 }
