@@ -97,4 +97,6 @@ export function CourseMap({}) {
 
         })();
     }, []);
+
+    return null;
 }

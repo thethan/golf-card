@@ -34,8 +34,9 @@ function WebRoundView() {
 }
 
 function WebApp() {
-    // For GitHub Pages, use the /golf-card/ base path
-    const basename = process.env.GITHUB_PAGES ? "/golf-card/" : "/";
+    // Vite injects BASE_URL from the 'base' config (e.g., '/golf-card/' for GitHub Pages)
+    // Remove trailing slash for React Router basename
+    const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
     return (
         <BrowserRouter basename={basename}>
             <Routes>
